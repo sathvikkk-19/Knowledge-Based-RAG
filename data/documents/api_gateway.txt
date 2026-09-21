@@ -1,0 +1,13 @@
+Acme API Gateway
+
+The Acme API Gateway is an API management component used by Acme Cloud Platform.
+
+The gateway handles authentication, rate limiting, request routing, and API monitoring.
+
+The Acme API Gateway depends on Kubernetes for container orchestration.
+
+The gateway is compatible with Kubernetes version 1.30 and later.
+
+The Acme API Gateway integrates with PostgreSQL for storing configuration and API metadata.
+
+The gateway is developed and maintained by Acme Technologies.

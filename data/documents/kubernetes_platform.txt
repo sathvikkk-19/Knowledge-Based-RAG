@@ -1,0 +1,13 @@
+Kubernetes Platform
+
+Kubernetes is a container orchestration technology used to deploy and manage containerized applications.
+
+Kubernetes version 1.30 provides scheduling, service discovery, container lifecycle management, and automated scaling.
+
+Kubernetes is provided and maintained by CloudNative Systems.
+
+Acme Cloud Platform version 3.0 requires Kubernetes version 1.30 or later.
+
+The Acme API Gateway also requires Kubernetes version 1.30 or later.
+
+Kubernetes integrates with PostgreSQL-backed applications through standard database connectivity mechanisms.

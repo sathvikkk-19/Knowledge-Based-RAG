@@ -1,0 +1,13 @@
+PostgreSQL Database
+
+PostgreSQL is a relational database technology used for transactional application workloads.
+
+PostgreSQL version 16 provides improved query performance, logical replication improvements, and enhanced monitoring capabilities.
+
+PostgreSQL is provided by DataCore Systems.
+
+Acme Cloud Platform uses PostgreSQL as its primary relational database.
+
+The Acme API Gateway uses PostgreSQL to store configuration and API metadata.
+
+PostgreSQL can be deployed alongside Kubernetes-based applications.

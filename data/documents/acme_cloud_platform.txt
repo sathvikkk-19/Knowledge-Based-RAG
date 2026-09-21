@@ -1,0 +1,13 @@
+Acme Cloud Platform
+
+Acme Cloud Platform is an enterprise application platform developed by Acme Technologies.
+
+The platform depends on the Acme API Gateway for handling external API traffic. It uses PostgreSQL as its primary relational database.
+
+Acme Cloud Platform version 3.0 introduced improved API management, automated deployment, and centralized monitoring.
+
+The platform is compatible with Kubernetes version 1.30 and later.
+
+Acme Cloud Platform requires Kubernetes for container orchestration in its standard deployment architecture.
+
+The Acme API Gateway is a required component of the platform when external API access is enabled.
