@@ -1,7 +1,42 @@
 import { useState, useEffect, useRef } from "react";
+import KnowledgeGraphVisualizer from "./components/KnowledgeGraphVisualizer";
 import "./App.css";
 
 const API_URL = "http://127.0.0.1:8000";
+
+// Helper to convert linear graph evidence paths into nodes and links for 2D visualizer
+function convertEvidenceToGraph(graphEvidence) {
+  if (!graphEvidence || !Array.isArray(graphEvidence)) return { nodes: [], links: [] };
+  const nodesMap = new Map();
+  const links = [];
+
+  graphEvidence.forEach((item) => {
+    const nodes = item.nodes || [];
+    nodes.forEach((n) => {
+      if (n && n.name && !nodesMap.has(n.name)) {
+        nodesMap.set(n.name, {
+          id: n.name,
+          name: n.name,
+          entity_type: n.entity_type || "Entity",
+        });
+      }
+    });
+
+    for (let i = 0; i < nodes.length - 1; i++) {
+      links.push({
+        source: nodes[i].name,
+        target: nodes[i + 1].name,
+        relationship: item.relationship || "RELATED_TO",
+        confidence: item.confidence || 1.0,
+      });
+    }
+  });
+
+  return {
+    nodes: Array.from(nodesMap.values()),
+    links,
+  };
+}
 
 const SUPPORTED_FORMATS = [
   { label: "PDF", ext: ".pdf", color: "#ff4d4f" },
@@ -21,6 +56,13 @@ function App() {
   // Documents and active filter
   const [documents, setDocuments] = useState([]);
   const [selectedDocId, setSelectedDocId] = useState(null);
+
+  // Graph explorer & visualizer states
+  const [evidenceViewMode, setEvidenceViewMode] = useState("visual"); // 'visual' | 'raw'
+  const [showGraphModal, setShowGraphModal] = useState(false);
+  const [fullGraphData, setFullGraphData] = useState(null);
+  const [loadingGraph, setLoadingGraph] = useState(false);
+  const [graphFilterDocId, setGraphFilterDocId] = useState("");
 
   // Upload states
   const [dragOver, setDragOver] = useState(false);
@@ -48,6 +90,37 @@ function App() {
   useEffect(() => {
     fetchDocuments();
   }, []);
+
+  // Fetch full knowledge graph data for modal visualizer
+  const fetchFullGraph = async (docId = "") => {
+    setLoadingGraph(true);
+    try {
+      const url = docId
+        ? `${API_URL}/graph?document_id=${encodeURIComponent(docId)}&limit=250`
+        : `${API_URL}/graph?limit=300`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        setFullGraphData(data);
+      }
+    } catch (err) {
+      console.error("Failed to load knowledge graph:", err);
+    } finally {
+      setLoadingGraph(false);
+    }
+  };
+
+  const openGraphModal = (docId = "") => {
+    const targetDoc = docId || selectedDocId || "";
+    setGraphFilterDocId(targetDoc);
+    setShowGraphModal(true);
+    fetchFullGraph(targetDoc);
+  };
+
+  const handleGraphFilterChange = (newDocId) => {
+    setGraphFilterDocId(newDocId);
+    fetchFullGraph(newDocId);
+  };
 
   // Handle document upload
   const handleFileUpload = async (file) => {
@@ -182,6 +255,15 @@ function App() {
         </div>
 
         <div className="nav-controls">
+          <button
+            className="nav-explore-btn"
+            onClick={() => openGraphModal(selectedDocId || "")}
+            title="Open Interactive 2D Knowledge Graph Visualizer"
+          >
+            <span className="nav-explore-icon">☊</span>
+            <span>Explore Graph</span>
+          </button>
+
           <div className="doc-count-badge">
             <span className="count-number">{documents.length}</span>
             <span>Documents Loaded</span>
@@ -349,6 +431,16 @@ function App() {
                   </div>
                 </div>
               )}
+
+              <div className="upload-success-actions">
+                <button
+                  className="view-graph-btn"
+                  onClick={() => openGraphModal(uploadResult.document_id)}
+                >
+                  <span className="btn-sparkle">✦</span>
+                  <span>View Document in Knowledge Graph</span>
+                </button>
+              </div>
             </div>
           )}
         </section>
@@ -581,33 +673,58 @@ function App() {
                     <div className="card-label">KNOWLEDGE GRAPH EVIDENCE</div>
                     <h3>Relational Paths in Neo4j</h3>
                   </div>
-                  <span className="count">{result.graph_evidence.length}</span>
-                </div>
-
-                <div className="graph-list">
-                  {result.graph_evidence.map((evidence, index) => (
-                    <div className="graph-item" key={index}>
-                      <div className="graph-top">
-                        <span className="relationship">{evidence.relationship}</span>
-                        <span className="graph-confidence">
-                          {Math.round(evidence.confidence * 100)}% confidence
-                        </span>
-                      </div>
-
-                      <div className="graph-nodes">
-                        {evidence.nodes?.map((node, nodeIndex) => (
-                          <div className="graph-node" key={nodeIndex}>
-                            <span className="node-type">{node.entity_type}</span>
-                            <span className="node-name">{node.name}</span>
-                            {nodeIndex < evidence.nodes.length - 1 && (
-                              <span className="node-arrow">→</span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
+                  <div className="graph-evidence-actions">
+                    <div className="view-mode-toggle">
+                      <button
+                        className={`view-toggle-btn ${evidenceViewMode === "visual" ? "active" : ""}`}
+                        onClick={() => setEvidenceViewMode("visual")}
+                      >
+                        ✦ Visual 2D Graph
+                      </button>
+                      <button
+                        className={`view-toggle-btn ${evidenceViewMode === "raw" ? "active" : ""}`}
+                        onClick={() => setEvidenceViewMode("raw")}
+                      >
+                        ☰ List ({result.graph_evidence.length})
+                      </button>
                     </div>
-                  ))}
+                  </div>
                 </div>
+
+                {evidenceViewMode === "visual" ? (
+                  <div className="query-graph-wrapper">
+                    <KnowledgeGraphVisualizer
+                      data={convertEvidenceToGraph(result.graph_evidence)}
+                      title="Query Evidence Subgraph"
+                      height={420}
+                    />
+                  </div>
+                ) : (
+                  <div className="graph-list">
+                    {result.graph_evidence.map((evidence, index) => (
+                      <div className="graph-item" key={index}>
+                        <div className="graph-top">
+                          <span className="relationship">{evidence.relationship}</span>
+                          <span className="graph-confidence">
+                            {Math.round(evidence.confidence * 100)}% confidence
+                          </span>
+                        </div>
+
+                        <div className="graph-nodes">
+                          {evidence.nodes?.map((node, nodeIndex) => (
+                            <div className="graph-node" key={nodeIndex}>
+                              <span className="node-type">{node.entity_type}</span>
+                              <span className="node-name">{node.name}</span>
+                              {nodeIndex < evidence.nodes.length - 1 && (
+                                <span className="node-arrow">→</span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
@@ -653,6 +770,86 @@ function App() {
         <span>Hybrid Graph RAG v2.0</span>
         <span>Neo4j × PostgreSQL pgvector × Gemini</span>
       </footer>
+
+      {/* ============================================================ */}
+      {/* FULL KNOWLEDGE GRAPH EXPLORER MODAL */}
+      {/* ============================================================ */}
+      {showGraphModal && (
+        <div className="kg-modal-overlay" onClick={() => setShowGraphModal(false)}>
+          <div
+            className="kg-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="kg-modal-header">
+              <div className="kg-modal-title-wrap">
+                <div className="kg-modal-title">
+                  <span className="kg-modal-icon">✦</span>
+                  Interactive Knowledge Graph Explorer
+                </div>
+                <p className="kg-modal-subtitle">
+                  Explore extracted semantic entities, types, and cross-document relationships stored in Neo4j.
+                </p>
+              </div>
+
+              <div className="kg-modal-controls">
+                <div className="kg-select-wrap">
+                  <label className="kg-select-label">Document Scope:</label>
+                  <select
+                    className="kg-doc-select"
+                    value={graphFilterDocId}
+                    onChange={(e) => handleGraphFilterChange(e.target.value)}
+                  >
+                    <option value="">All Documents (Global Graph)</option>
+                    {documents.map((doc) => (
+                      <option key={doc.document_id} value={doc.document_id}>
+                        {doc.document_id} ({doc.chunk_count} chunks)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <button
+                  className="kg-modal-close-btn"
+                  onClick={() => setShowGraphModal(false)}
+                  title="Close Explorer"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <div className="kg-modal-body">
+              {loadingGraph ? (
+                <div className="kg-loading-box">
+                  <div className="kg-spinner"></div>
+                  <span>Fetching graph nodes and relationships from Neo4j...</span>
+                </div>
+              ) : fullGraphData && fullGraphData.nodes && fullGraphData.nodes.length > 0 ? (
+                <KnowledgeGraphVisualizer
+                  data={fullGraphData}
+                  title={
+                    graphFilterDocId
+                      ? `Scope: ${graphFilterDocId}`
+                      : "Complete Enterprise Knowledge Graph"
+                  }
+                  height={620}
+                />
+              ) : (
+                <div className="kg-empty-box">
+                  <div className="kg-empty-icon">☊</div>
+                  <h4>No Graph Topology Found</h4>
+                  <p>
+                    There are no entities or relationships matching the selected document scope in Neo4j.
+                  </p>
+                  <span className="kg-empty-hint">
+                    Upload a document first or switch scope to "All Documents".
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

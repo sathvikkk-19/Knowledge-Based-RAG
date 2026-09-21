@@ -18,6 +18,11 @@ An enterprise-grade **Hybrid Knowledge Graph & Vector RAG** system that combines
   - Stores chunk embeddings with HNSW cosine indexing in PostgreSQL `pgvector`.
 - **Intelligent Hybrid Query Routing:**
   - Dynamically classifies user questions (`vector`, `graph`, or `both`) to combine structured graph traversal with semantic similarity.
+- **Interactive 2D Knowledge Graph Visualizer:**
+  - Real-time HTML5 Canvas force-directed physics engine with node repulsion, spring tension, velocity damping, dragging, panning, and mousewheel zoom.
+  - Entity-type neon color glowing (`Product`, `Database`, `Technology`, `Company`, `API`, `Component`, etc.) and directional arrows.
+  - Interactive hover tooltips displaying entity metadata and degree of connectivity.
+  - Dual visualization modes: Per-query evidence subgraph inspection and a Global Knowledge Graph Explorer modal.
 - **Modern Interactive UI (React + Vite):**
   - Drag-and-drop document upload with 3-stage live ingestion tracker.
   - Document-scoped querying or global knowledge search.
@@ -136,6 +141,7 @@ npm.cmd run dev
 |---|---|---|
 | `POST` | `/upload` | Multipart upload for `.pdf`, `.docx`, `.csv`, `.xlsx`, `.pptx`, `.txt` |
 | `GET` | `/documents` | Lists all ingested documents and chunk counts |
+| `GET` | `/graph` | Retrieves nodes and relationships from Neo4j for visual rendering (optional `document_id` & `limit`) |
 | `POST` | `/query` | Hybrid query with optional `document_id` scope filter |
 | `GET` | `/health` | Health check |
 
@@ -146,7 +152,11 @@ npm.cmd run dev
 Run the automated test suite:
 
 ```bash
+# Test multi-format ingestion
 .\venv\Scripts\python tests/test_multi_format_upload.py
+
+# Test interactive graph visualization endpoint
+.\venv\Scripts\python tests/test_graph_visualization.py
 ```
 
 ---

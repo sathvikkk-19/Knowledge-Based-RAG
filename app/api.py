@@ -6,6 +6,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from app.graph.graph_retriever import GraphRetriever
 from app.ingestion.loader import SUPPORTED_EXTENSIONS
 from app.ingestion.pipeline import DocumentIngestor
 from app.llm.answer_generator import AnswerGenerator
@@ -81,6 +82,15 @@ class DocumentItem(BaseModel):
     chunk_count: int
 
 
+class GraphDataResponse(BaseModel):
+    status: str = "success"
+    document_id: str | None = None
+    node_count: int
+    link_count: int
+    nodes: list[dict]
+    links: list[dict]
+
+
 # Directory for uploaded files
 UPLOADS_DIR = Path("data/uploads")
 UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
@@ -132,6 +142,34 @@ def get_documents():
     finally:
         if store:
             store.close()
+
+
+@app.get("/graph", response_model=GraphDataResponse)
+def get_graph(document_id: str | None = None, limit: int = 150):
+    """
+    Retrieve nodes and relationships from Neo4j for interactive visualization.
+    Optionally filtered by document_id.
+    """
+    retriever = None
+    try:
+        retriever = GraphRetriever()
+        data = retriever.get_graph_data(limit=limit, document_id=document_id)
+        return GraphDataResponse(
+            status="success",
+            document_id=document_id,
+            node_count=len(data["nodes"]),
+            link_count=len(data["links"]),
+            nodes=data["nodes"],
+            links=data["links"],
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Could not retrieve graph data: {e}",
+        )
+    finally:
+        if retriever:
+            retriever.close()
 
 
 @app.post("/upload", response_model=UploadResponse)
