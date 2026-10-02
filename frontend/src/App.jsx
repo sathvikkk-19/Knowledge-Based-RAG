@@ -1,5 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import KnowledgeGraphVisualizer from "./components/KnowledgeGraphVisualizer";
+import LegalModal from "./components/LegalModal";
+import {
+  NetworkIcon,
+  DocumentIcon,
+  UploadIcon,
+  SearchIcon,
+  CheckIcon,
+  AlertIcon,
+  ArrowRightIcon,
+  ArrowLeftIcon,
+  ArrowUpRightIcon,
+  CloseIcon,
+  ListIcon,
+  ShieldIcon,
+  FileTextIcon,
+} from "./components/Icons";
 import "./App.css";
 
 const API_URL = "http://127.0.0.1:8000";
@@ -39,12 +55,12 @@ function convertEvidenceToGraph(graphEvidence) {
 }
 
 const SUPPORTED_FORMATS = [
-  { label: "PDF", ext: ".pdf", color: "#ff4d4f" },
-  { label: "Word", ext: ".docx", color: "#1890ff" },
-  { label: "CSV", ext: ".csv", color: "#52c41a" },
-  { label: "Excel", ext: ".xlsx", color: "#13c2c2" },
-  { label: "PowerPoint", ext: ".pptx", color: "#fa8c16" },
-  { label: "Text", ext: ".txt", color: "#722ed1" },
+  { label: "PDF", ext: ".pdf", color: "#3b82f6" },
+  { label: "DOCX", ext: ".docx", color: "#60a5fa" },
+  { label: "CSV", ext: ".csv", color: "#10b981" },
+  { label: "XLSX", ext: ".xlsx", color: "#06b6d4" },
+  { label: "PPTX", ext: ".pptx", color: "#f59e0b" },
+  { label: "TXT", ext: ".txt", color: "#94a3b8" },
 ];
 
 function App() {
@@ -71,6 +87,9 @@ function App() {
   const [uploadResult, setUploadResult] = useState(null);
   const [uploadError, setUploadError] = useState("");
   const fileInputRef = useRef(null);
+
+  // Legal modal states ('privacy' | 'terms' | null)
+  const [legalModalTab, setLegalModalTab] = useState(null);
 
   // Fetch available documents on mount
   const fetchDocuments = async () => {
@@ -134,7 +153,6 @@ function App() {
     const formData = new FormData();
     formData.append("file", file);
 
-    // Dynamic progress timer to show lively UI stages
     const timer1 = setTimeout(() => setUploadStage("graph"), 1200);
     const timer2 = setTimeout(() => setUploadStage("vector"), 3500);
 
@@ -215,7 +233,7 @@ function App() {
     } catch (err) {
       console.error(err);
       setError(
-        err.message || "Could not connect to the RAG API. Make sure the FastAPI backend is running."
+        err.message || "Could not connect to the RAG API. Verify that the FastAPI backend is running."
       );
     } finally {
       setLoading(false);
@@ -237,19 +255,19 @@ function App() {
 
   return (
     <div className="app">
-      {/* Animated ambient background */}
-      <div className="aurora aurora-one"></div>
-      <div className="aurora aurora-two"></div>
+      {/* Subtle structural grid overlay */}
       <div className="grid-background"></div>
 
       {/* Navigation Bar */}
       <nav className="navbar">
         <div className="brand">
-          <div className="brand-icon">✦</div>
+          <div className="brand-icon">
+            <NetworkIcon size={18} />
+          </div>
           <div>
             <div className="brand-name">Knowledge Graph RAG</div>
             <div className="brand-subtitle">
-              Dynamic Multi-Format Ingestion & Hybrid Retrieval
+              Enterprise Hybrid Retrieval Engine
             </div>
           </div>
         </div>
@@ -258,9 +276,9 @@ function App() {
           <button
             className="nav-explore-btn"
             onClick={() => openGraphModal(selectedDocId || "")}
-            title="Open Interactive 2D Knowledge Graph Visualizer"
+            title="Open Interactive Knowledge Graph Visualizer"
           >
-            <span className="nav-explore-icon">☊</span>
+            <NetworkIcon size={15} />
             <span>Explore Graph</span>
           </button>
 
@@ -271,7 +289,7 @@ function App() {
 
           <div className="status">
             <span className="status-dot"></span>
-            Engine Active
+            Hybrid Engine Active
           </div>
         </div>
       </nav>
@@ -281,20 +299,20 @@ function App() {
         {/* Hero Section */}
         <section className="hero">
           <div className="eyebrow">
-            <span></span>
-            KNOWLEDGE GRAPH × PGVECTOR × GEMINI
+            <span className="eyebrow-dot"></span>
+            NEO4J × POSTGRESQL PGVECTOR × GEMINI
           </div>
 
           <h1>
-            Upload your document.
+            Enterprise Hybrid Knowledge Graph
             <br />
-            <span>Ask anything from it.</span>
+            <span>& Vector Retrieval Platform</span>
           </h1>
 
           <p className="hero-description">
-            Upload Word, PDF, CSV, Excel, PowerPoint, or text files. The system
-            automatically constructs a Neo4j knowledge graph and pgvector embeddings
-            to answer complex questions with verifiable citations.
+            Unified multi-format document ingestion, canonical entity resolution, and
+            relational graph traversal. Combines Neo4j topology with PostgreSQL pgvector
+            cosine search to answer multi-hop questions with verifiable citations.
           </p>
         </section>
 
@@ -325,18 +343,18 @@ function App() {
               {uploading ? (
                 <div className="upload-spinner"></div>
               ) : (
-                <span className="cloud-icon">↑</span>
+                <UploadIcon size={22} />
               )}
             </div>
 
             <div className="dropzone-content">
               <h3>
                 {uploading
-                  ? "Processing and Ingesting Document..."
-                  : "Drop your file here, or click to browse"}
+                  ? "Processing Document Pipeline..."
+                  : "Drop file to ingest, or click to browse"}
               </h3>
               <p>
-                Support for <strong>PDF, DOCX, CSV, Excel, PPTX, TXT</strong> (up to 50MB)
+                Supported formats: <strong>PDF, DOCX, CSV, XLSX, PPTX, TXT</strong> (up to 50MB)
               </p>
             </div>
 
@@ -359,7 +377,7 @@ function App() {
                 <div className="stepper">
                   <div className={`step ${uploadStage !== "idle" ? "active" : ""}`}>
                     <span className="step-circle">1</span>
-                    <span className="step-text">Extracting Text</span>
+                    <span className="step-text">Parsing Text</span>
                   </div>
                   <div className="step-divider"></div>
                   <div
@@ -370,7 +388,7 @@ function App() {
                     }`}
                   >
                     <span className="step-circle">2</span>
-                    <span className="step-text">Entity & Graph Extraction</span>
+                    <span className="step-text">Extracting Graph Triples</span>
                   </div>
                   <div className="step-divider"></div>
                   <div
@@ -379,7 +397,7 @@ function App() {
                     }`}
                   >
                     <span className="step-circle">3</span>
-                    <span className="step-text">Vector Embedding</span>
+                    <span className="step-text">Generating Embeddings</span>
                   </div>
                 </div>
               </div>
@@ -389,7 +407,7 @@ function App() {
           {/* Upload Error Banner */}
           {uploadError && (
             <div className="upload-error-banner">
-              <span className="error-icon-small">!</span>
+              <AlertIcon size={16} />
               <span>{uploadError}</span>
             </div>
           )}
@@ -399,7 +417,8 @@ function App() {
             <div className="upload-success-card">
               <div className="success-header">
                 <div className="success-badge">
-                  <span>✓</span> INGESTION COMPLETE
+                  <CheckIcon size={14} />
+                  <span>INGESTION COMPLETE</span>
                 </div>
                 <div className="success-filename">{uploadResult.file_name}</div>
               </div>
@@ -424,7 +443,7 @@ function App() {
                   <div className="sample-label">Extracted Entities:</div>
                   <div className="tag-container">
                     {uploadResult.sample_entities.map((ent, idx) => (
-                      <span key={idx} className="tag-pill">
+                      <span key={idx} className="tag-badge">
                         {ent}
                       </span>
                     ))}
@@ -437,7 +456,7 @@ function App() {
                   className="view-graph-btn"
                   onClick={() => openGraphModal(uploadResult.document_id)}
                 >
-                  <span className="btn-sparkle">✦</span>
+                  <NetworkIcon size={15} />
                   <span>View Document in Knowledge Graph</span>
                 </button>
               </div>
@@ -453,18 +472,18 @@ function App() {
             <div className="filter-header">
               <span className="filter-title">Active Query Scope:</span>
               <span className="filter-subtitle">
-                Select which document to query or ask across all
+                Select a specific document or query globally across all files
               </span>
             </div>
 
-            <div className="doc-pills">
+            <div className="doc-selectors">
               <button
-                className={`doc-pill ${selectedDocId === null ? "active" : ""}`}
+                className={`doc-btn ${selectedDocId === null ? "active" : ""}`}
                 onClick={() => setSelectedDocId(null)}
               >
-                <span className="pill-dot"></span>
-                All Documents
-                <span className="pill-count">
+                <span className="btn-indicator-dot"></span>
+                <span>All Documents</span>
+                <span className="btn-count">
                   {documents.reduce((acc, d) => acc + (d.chunk_count || 0), 0)} chunks
                 </span>
               </button>
@@ -472,12 +491,12 @@ function App() {
               {documents.map((doc, idx) => (
                 <button
                   key={idx}
-                  className={`doc-pill ${selectedDocId === doc.document_id ? "active" : ""}`}
+                  className={`doc-btn ${selectedDocId === doc.document_id ? "active" : ""}`}
                   onClick={() => setSelectedDocId(doc.document_id)}
                 >
-                  <span className="doc-icon">📄</span>
-                  {doc.document_id}
-                  <span className="pill-count">{doc.chunk_count} chunks</span>
+                  <DocumentIcon size={14} />
+                  <span>{doc.document_id}</span>
+                  <span className="btn-count">{doc.chunk_count} chunks</span>
                 </button>
               ))}
             </div>
@@ -491,19 +510,19 @@ function App() {
           <div className="query-box">
             <div className="query-header">
               <div className="query-label">
-                <span className="query-icon">✦</span>
-                Ask a Question
+                <SearchIcon size={15} />
+                <span>Query Knowledge Base</span>
               </div>
 
               {selectedDocId && (
                 <div className="active-scope-badge">
-                  Scoped to: <strong>{selectedDocId}</strong>
+                  <span>Scoped to: <strong>{selectedDocId}</strong></span>
                   <button
                     className="clear-scope-btn"
                     onClick={() => setSelectedDocId(null)}
                     title="Query all documents"
                   >
-                    ✕
+                    <CloseIcon size={12} />
                   </button>
                 </div>
               )}
@@ -516,13 +535,13 @@ function App() {
               placeholder={
                 selectedDocId
                   ? `Ask questions specific to ${selectedDocId}...`
-                  : "Ask anything across your uploaded documents..."
+                  : "Ask questions grounded in uploaded documents and entity relationships..."
               }
               rows={3}
             />
 
             <div className="query-bottom">
-              <span className="hint">Press Enter to ask</span>
+              <span className="hint">Press Enter to run query, Shift + Enter for new line</span>
 
               <button
                 className="ask-button"
@@ -532,12 +551,12 @@ function App() {
                 {loading ? (
                   <>
                     <span className="spinner"></span>
-                    Synthesizing...
+                    <span>Synthesizing...</span>
                   </>
                 ) : (
                   <>
-                    Ask Question
-                    <span>→</span>
+                    <span>Execute Query</span>
+                    <ArrowRightIcon size={14} />
                   </>
                 )}
               </button>
@@ -548,7 +567,7 @@ function App() {
         {/* Example Questions */}
         {!result && !loading && (
           <section className="examples">
-            <div className="section-label">SUGGESTED QUESTIONS</div>
+            <div className="section-label">SUGGESTED TECHNICAL QUERIES</div>
 
             <div className="example-grid">
               {defaultExamples.map((example, index) => (
@@ -558,8 +577,8 @@ function App() {
                   onClick={() => setQuestion(example)}
                 >
                   <span className="example-number">0{index + 1}</span>
-                  <span>{example}</span>
-                  <span className="example-arrow">↗</span>
+                  <span className="example-text">{example}</span>
+                  <ArrowUpRightIcon size={14} className="example-arrow" />
                 </button>
               ))}
             </div>
@@ -569,10 +588,12 @@ function App() {
         {/* Loading Indicator */}
         {loading && (
           <section className="loading-card">
-            <div className="loading-orb"></div>
+            <div className="loading-spinner-box">
+              <div className="loading-spinner"></div>
+            </div>
             <div>
               <h3>Synthesizing Answer</h3>
-              <p>Traversing knowledge graph relations and ranking vector embeddings...</p>
+              <p>Traversing Neo4j relational paths and ranking pgvector cosine similarities...</p>
             </div>
           </section>
         )}
@@ -580,9 +601,9 @@ function App() {
         {/* Error Card */}
         {error && (
           <section className="error-card">
-            <div className="error-icon">!</div>
+            <AlertIcon size={20} className="error-icon" />
             <div>
-              <h3>Query Failed</h3>
+              <h3>Query Execution Error</h3>
               <p>{error}</p>
             </div>
           </section>
@@ -599,15 +620,15 @@ function App() {
                 <div>
                   <div className="card-label">
                     <span className="green-dot"></span>
-                    SYNTHESIZED ANSWER
+                    SYNTHESIZED GROUNDED RESPONSE
                   </div>
-                  <h2>Generated Response</h2>
+                  <h2>Generated Answer</h2>
                 </div>
 
-                <div className="route-pill-container">
-                  <span className="route-pill">{result.route.toUpperCase()}</span>
+                <div className="route-badge-container">
+                  <span className="route-badge">{result.route.toUpperCase()}</span>
                   {result.document_id && (
-                    <span className="scope-pill">DOC: {result.document_id}</span>
+                    <span className="scope-badge">DOC: {result.document_id}</span>
                   )}
                 </div>
               </div>
@@ -623,17 +644,17 @@ function App() {
                   <span className="route-indicator"></span>
                   {result.route}
                 </div>
-                <p>Hybrid retrieval strategy selected by the router.</p>
+                <p>Retrieval strategy selected by the router.</p>
               </div>
 
               <div className="info-card">
-                <div className="info-label">QUERY TYPE</div>
+                <div className="info-label">QUERY CLASSIFICATION</div>
                 <div className="info-value">{result.query_type}</div>
-                <p>Classification produced by the LLM query analyzer.</p>
+                <p>Categorization determined by LLM query analysis.</p>
               </div>
 
               <div className="info-card">
-                <div className="info-label">CONFIDENCE</div>
+                <div className="info-label">ROUTING CONFIDENCE</div>
                 <div className="confidence-row">
                   <div className="confidence-value">
                     {Math.round(result.confidence * 100)}%
@@ -647,17 +668,17 @@ function App() {
                     ></div>
                   </div>
                 </div>
-                <p>Confidence score in the retrieved evidence.</p>
+                <p>Confidence score in the selected retrieval path.</p>
               </div>
             </div>
 
             {/* Entities Identified */}
             {result.entities?.length > 0 && (
               <div className="details-card">
-                <div className="card-label">RECOGNIZED ENTITIES</div>
+                <div className="card-label">RECOGNIZED QUERY ENTITIES</div>
                 <div className="tag-container">
                   {result.entities.map((entity, index) => (
-                    <span className="tag" key={index}>
+                    <span className="tag-badge" key={index}>
                       {entity}
                     </span>
                   ))}
@@ -679,13 +700,15 @@ function App() {
                         className={`view-toggle-btn ${evidenceViewMode === "visual" ? "active" : ""}`}
                         onClick={() => setEvidenceViewMode("visual")}
                       >
-                        ✦ Visual 2D Graph
+                        <NetworkIcon size={13} />
+                        <span>Interactive Graph</span>
                       </button>
                       <button
                         className={`view-toggle-btn ${evidenceViewMode === "raw" ? "active" : ""}`}
                         onClick={() => setEvidenceViewMode("raw")}
                       >
-                        ☰ List ({result.graph_evidence.length})
+                        <ListIcon size={13} />
+                        <span>Paths ({result.graph_evidence.length})</span>
                       </button>
                     </div>
                   </div>
@@ -696,7 +719,7 @@ function App() {
                     <KnowledgeGraphVisualizer
                       data={convertEvidenceToGraph(result.graph_evidence)}
                       title="Query Evidence Subgraph"
-                      height={420}
+                      height={400}
                     />
                   </div>
                 ) : (
@@ -733,10 +756,10 @@ function App() {
               <div className="details-card">
                 <div className="details-heading">
                   <div>
-                    <div className="card-label">VECTOR EVIDENCE</div>
+                    <div className="card-label">PGVECTOR EVIDENCE</div>
                     <h3>Retrieved Text Chunks</h3>
                   </div>
-                  <span className="count">{result.sources.length}</span>
+                  <span className="count">{result.sources.length} Chunks</span>
                 </div>
 
                 <div className="source-list">
@@ -745,7 +768,7 @@ function App() {
                       <span className="source-index">
                         {String(index + 1).padStart(2, "0")}
                       </span>
-                      <span>{source}</span>
+                      <span className="source-content">{source}</span>
                     </div>
                   ))}
                 </div>
@@ -753,22 +776,53 @@ function App() {
             )}
 
             <button
-              className="new-question"
+              className="new-question-btn"
               onClick={() => {
                 setResult(null);
                 setQuestion("");
               }}
             >
-              ← Ask another question
+              <ArrowLeftIcon size={14} />
+              <span>Ask another question</span>
             </button>
           </section>
         )}
       </main>
 
       {/* Footer */}
-      <footer>
-        <span>Hybrid Graph RAG v2.0</span>
-        <span>Neo4j × PostgreSQL pgvector × Gemini</span>
+      <footer className="footer">
+        <div className="footer-container">
+          <div className="footer-left">
+            <span className="footer-brand">Hybrid Graph RAG v2.0</span>
+            <span className="footer-sep">/</span>
+            <span className="footer-tech">Neo4j × PostgreSQL pgvector × Gemini</span>
+          </div>
+
+          <div className="footer-right">
+            <button
+              className="footer-link-btn"
+              onClick={() => setLegalModalTab("privacy")}
+            >
+              Privacy Policy
+            </button>
+            <span className="footer-dot">•</span>
+            <button
+              className="footer-link-btn"
+              onClick={() => setLegalModalTab("terms")}
+            >
+              Terms & Conditions
+            </button>
+            <span className="footer-dot">•</span>
+            <a
+              href="http://127.0.0.1:8000/docs"
+              target="_blank"
+              rel="noreferrer"
+              className="footer-link-btn"
+            >
+              API Reference
+            </a>
+          </div>
+        </div>
       </footer>
 
       {/* ============================================================ */}
@@ -783,11 +837,11 @@ function App() {
             <div className="kg-modal-header">
               <div className="kg-modal-title-wrap">
                 <div className="kg-modal-title">
-                  <span className="kg-modal-icon">✦</span>
-                  Interactive Knowledge Graph Explorer
+                  <NetworkIcon size={18} />
+                  <span>Knowledge Graph Explorer</span>
                 </div>
                 <p className="kg-modal-subtitle">
-                  Explore extracted semantic entities, types, and cross-document relationships stored in Neo4j.
+                  Inspect extracted entities, canonical types, and relational paths persisted in Neo4j.
                 </p>
               </div>
 
@@ -813,7 +867,7 @@ function App() {
                   onClick={() => setShowGraphModal(false)}
                   title="Close Explorer"
                 >
-                  ✕
+                  <CloseIcon size={16} />
                 </button>
               </div>
             </div>
@@ -836,7 +890,7 @@ function App() {
                 />
               ) : (
                 <div className="kg-empty-box">
-                  <div className="kg-empty-icon">☊</div>
+                  <NetworkIcon size={32} />
                   <h4>No Graph Topology Found</h4>
                   <p>
                     There are no entities or relationships matching the selected document scope in Neo4j.
@@ -849,6 +903,16 @@ function App() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* PRIVACY POLICY & TERMS MODAL */}
+      {/* ============================================================ */}
+      {legalModalTab && (
+        <LegalModal
+          initialTab={legalModalTab}
+          onClose={() => setLegalModalTab(null)}
+        />
       )}
     </div>
   );

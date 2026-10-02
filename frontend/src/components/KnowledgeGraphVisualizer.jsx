@@ -1,18 +1,26 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import {
+  PlayIcon,
+  PauseIcon,
+  ResetIcon,
+  MaximizeIcon,
+  MinimizeIcon,
+  CloseIcon,
+} from "./Icons";
 import "./KnowledgeGraphVisualizer.css";
 
-// Color mapping by entity type
+// Color mapping by entity type (Clean high-contrast technical palette)
 const TYPE_COLORS = {
-  Product: "#e100ff",
-  Database: "#00f0ff",
-  Technology: "#7928ca",
-  Company: "#00df89",
-  API: "#f5a623",
-  Component: "#ff007f",
-  Feature: "#3b82f6",
+  Product: "#3b82f6",
+  Database: "#06b6d4",
+  Technology: "#6366f1",
+  Company: "#10b981",
+  API: "#f59e0b",
+  Component: "#14b8a6",
+  Feature: "#0ea5e9",
   Version: "#94a3b8",
-  Document: "#a855f7",
-  default: "#67f59b",
+  Document: "#64748b",
+  default: "#10b981",
 };
 
 export default function KnowledgeGraphVisualizer({
@@ -212,14 +220,14 @@ export default function KnowledgeGraphVisualizer({
         ctx.lineTo(link.target.x, link.target.y);
 
         ctx.strokeStyle = isHighlight
-          ? "#e100ff"
+          ? "#3b82f6"
           : isDim
           ? "rgba(255, 255, 255, 0.04)"
           : "rgba(255, 255, 255, 0.16)";
         ctx.lineWidth = isHighlight ? 2.5 : 1.2;
 
         if (isHighlight) {
-          ctx.shadowColor = "#e100ff";
+          ctx.shadowColor = "#3b82f6";
           ctx.shadowBlur = 8;
         }
         ctx.stroke();
@@ -235,7 +243,7 @@ export default function KnowledgeGraphVisualizer({
         const arrowY = link.source.y + Math.sin(arrowAngle) * arrowDist;
 
         ctx.save();
-        ctx.fillStyle = isHighlight ? "#e100ff" : "rgba(255, 255, 255, 0.4)";
+        ctx.fillStyle = isHighlight ? "#3b82f6" : "rgba(255, 255, 255, 0.4)";
         ctx.beginPath();
         ctx.moveTo(arrowX, arrowY);
         ctx.lineTo(
@@ -259,7 +267,7 @@ export default function KnowledgeGraphVisualizer({
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
 
-          // Label pill background
+          // Label background badge
           const label = link.relationship;
           const textWidth = ctx.measureText(label).width;
           ctx.fillStyle = "rgba(10, 10, 16, 0.85)";
@@ -267,11 +275,11 @@ export default function KnowledgeGraphVisualizer({
           ctx.roundRect(midX - textWidth / 2 - 4, midY - 7, textWidth + 8, 14, 4);
           ctx.fill();
           ctx.strokeStyle = isHighlight
-            ? "rgba(225, 0, 255, 0.6)"
+            ? "rgba(59, 130, 246, 0.7)"
             : "rgba(255, 255, 255, 0.12)";
           ctx.stroke();
 
-          ctx.fillStyle = isHighlight ? "#f5b0ff" : "#9999a5";
+          ctx.fillStyle = isHighlight ? "#93c5fd" : "#9999a5";
           ctx.fillText(label, midX, midY);
           ctx.restore();
         }
@@ -496,9 +504,9 @@ export default function KnowledgeGraphVisualizer({
         <div className="kg-title-row">
           <span className="kg-pulse-icon"></span>
           <span className="kg-title">{title}</span>
-          <div className="kg-stats-pill">
+          <div className="kg-stats-badge">
             <span>{stats.nodes} Nodes</span>
-            <span>•</span>
+            <span>/</span>
             <span>{stats.links} Edges</span>
           </div>
         </div>
@@ -512,21 +520,21 @@ export default function KnowledgeGraphVisualizer({
             -
           </button>
           <button onClick={resetView} title="Reset View" className="kg-tool-btn">
-            ⟲
+            <ResetIcon size={13} />
           </button>
           <button
             onClick={toggleSimulation}
             title={isPaused ? "Resume Physics" : "Pause Physics"}
             className={`kg-tool-btn ${isPaused ? "active" : ""}`}
           >
-            {isPaused ? "▶" : "⏸"}
+            {isPaused ? <PlayIcon size={12} /> : <PauseIcon size={12} />}
           </button>
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen View"}
             className="kg-tool-btn"
           >
-            {isFullscreen ? "✕" : "⛶"}
+            {isFullscreen ? <CloseIcon size={13} /> : <MaximizeIcon size={13} />}
           </button>
         </div>
       </div>
