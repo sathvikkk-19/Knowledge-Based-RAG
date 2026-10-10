@@ -1,5 +1,10 @@
 # Knowledge-Based RAG (Hybrid Graph & Vector Retrieval-Augmented Generation)
 
+[![License: Custom Attribution](https://img.shields.io/badge/License-Custom_Attribution_&_Anti--Plagiarism-blue.svg)](LICENSE)
+[![Author: Sathvik](https://img.shields.io/badge/Lead_Author-Sathvik-22c55e.svg)](https://github.com/sathvikkk-19)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776ab.svg)](https://www.python.org/)
+[![React 19](https://img.shields.io/badge/Frontend-React_19_+_Vite-61dafb.svg)](https://react.dev/)
+
 An enterprise-grade **Hybrid Knowledge Graph & Vector RAG** system that combines **Neo4j**, **PostgreSQL (pgvector)**, and **Google Gemini** to deliver accurate, context-rich, and verifiable answers across multi-format documents.
 
 ---
@@ -161,6 +166,20 @@ Run the automated test suite:
 
 ---
 
-## 📄 License
+## 📄 Ownership & License
 
-MIT License.
+### 👤 Authors & Intellectual Property
+- **Lead / Primary Creator & Owner:** **Sathvik** ([@sathvikkk-19](https://github.com/sathvikkk-19))
+- **Designated Co-Owner:** Private Contributor
+
+All original architecture, source code, data pipelines, graph extraction algorithms, and visualizations are the intellectual property of **Sathvik** and the designated co-owner. Apart from these two individuals, no one else holds ownership or may claim to have built this project from scratch.
+
+### 📜 Terms of Use
+This project is licensed under a **Custom Permissive Source Code & Educational License with Strict Authorship & Anti-Plagiarism Protection**:
+
+- ✅ **Free for Educational & Academic Use:** You are free to inspect, study, learn from, run, and experiment with this codebase.
+- ✅ **Development & Modification:** You are permitted to fork, alter, modify, and build upon the code for personal development and research.
+- 🚫 **Strict Prohibition Against False Authorship Claims:** Under **no circumstances** may any third party claim, represent, or imply (in resumes, portfolios, presentations, competitions, or public repositories) that they conceived or built this project from scratch.
+- 📌 **Mandatory Attribution:** Any distribution, fork, or derivative work must retain the original copyright notice and acknowledge the source repository.
+
+For the full legal terms and conditions, refer to the [LICENSE](LICENSE) file.

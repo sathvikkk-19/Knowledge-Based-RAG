@@ -25,6 +25,13 @@ export default function LegalModal({ initialTab = "privacy", onClose }) {
               <FileTextIcon size={15} />
               <span>Terms & Conditions</span>
             </button>
+            <button
+              className={`legal-tab-btn ${activeTab === "license" ? "active" : ""}`}
+              onClick={() => setActiveTab("license")}
+            >
+              <FileTextIcon size={15} />
+              <span>License & Ownership</span>
+            </button>
           </div>
 
           <button
@@ -38,7 +45,7 @@ export default function LegalModal({ initialTab = "privacy", onClose }) {
 
         {/* Modal Body */}
         <div className="legal-body">
-          {activeTab === "privacy" ? (
+          {activeTab === "privacy" && (
             <div className="legal-content">
               <div className="legal-doc-header">
                 <h2>Privacy Policy</h2>
@@ -140,7 +147,9 @@ export default function LegalModal({ initialTab = "privacy", onClose }) {
                 </p>
               </section>
             </div>
-          ) : (
+          )}
+
+          {activeTab === "terms" && (
             <div className="legal-content">
               <div className="legal-doc-header">
                 <h2>Terms & Conditions</h2>
@@ -159,9 +168,11 @@ export default function LegalModal({ initialTab = "privacy", onClose }) {
               <section className="legal-section">
                 <h3>2. Permitted Use and Licensing</h3>
                 <p>
-                  Subject to compliance with repository licenses (MIT License), you are granted a non-exclusive,
-                  revocable right to deploy, configure, and operate this software for enterprise retrieval,
-                  internal knowledge management, and data evaluation.
+                  This software is distributed under a Custom Permissive Source Code & Educational
+                  License. Sole original ownership is held exclusively by Sathvik (@sathvikkk-19)
+                  and the designated private co-owner. Users and developers are granted rights to run,
+                  inspect, alter, and build upon the codebase for educational and developmental purposes.
+                  In no case may any party claim to have conceived or built this project from scratch.
                 </p>
               </section>
 
@@ -232,6 +243,76 @@ export default function LegalModal({ initialTab = "privacy", onClose }) {
                   Operators may terminate or restrict local service instances at any time. Provisions regarding
                   intellectual property ownership, warranty disclaimers, and limitation of liability shall survive
                   any termination.
+                </p>
+              </section>
+            </div>
+          )}
+
+          {activeTab === "license" && (
+            <div className="legal-content">
+              <div className="legal-doc-header">
+                <h2>Software License & Ownership Agreement</h2>
+                <div className="legal-doc-date">Effective: 2026 | Repository: sathvikkk-19/Knowledge-Based-RAG</div>
+              </div>
+
+              <section className="legal-section">
+                <h3>1. Sole Original Authorship & Ownership</h3>
+                <p>
+                  This project, its hybrid graph-vector architecture, entity resolution pipeline,
+                  database integration, and interactive visualization interfaces are the original
+                  intellectual property and creation of <strong>Sathvik</strong> (Lead Owner & Creator, 
+                  <code>@sathvikkk-19</code>) and a <strong>Designated Co-Owner</strong> (confidential contributor).
+                </p>
+                <p>
+                  Apart from these two individuals, no third party, organization, or institution possesses
+                  ownership or may claim original authorship of this project.
+                </p>
+              </section>
+
+              <section className="legal-section">
+                <h3>2. Grant of Rights & Permitted Uses</h3>
+                <p>Subject to compliance with this license, third parties are granted permission to:</p>
+                <ul>
+                  <li>
+                    <strong>Study & Learn:</strong> Inspect, run, and experiment with the codebase for
+                    educational, research, and technical analysis purposes.
+                  </li>
+                  <li>
+                    <strong>Modify & Extend:</strong> Fork, alter, adapt, and build upon the source code
+                    for personal and academic development.
+                  </li>
+                  <li>
+                    <strong>Deploy Internally:</strong> Run and operate instances for local or internal
+                    evaluation.
+                  </li>
+                </ul>
+              </section>
+
+              <section className="legal-section">
+                <h3>3. Strict Anti-Plagiarism & Authorship Protection</h3>
+                <p>The following mandatory conditions are strictly enforced:</p>
+                <ul>
+                  <li>
+                    <strong>No False Authorship Claims:</strong> Under no circumstances may any individual
+                    or entity represent, claim, or imply (in resumes, portfolios, presentations, interviews,
+                    competitions, or repositories) that they designed or built this project from scratch.
+                  </li>
+                  <li>
+                    <strong>Mandatory Attribution:</strong> All copies, forks, or derivative works must
+                    prominently retain original copyright notices and cite Sathvik as the original lead creator.
+                  </li>
+                  <li>
+                    <strong>Derivative Marking:</strong> Modified versions must clearly state that they are
+                    altered derivative works based on the original Knowledge-Based RAG project.
+                  </li>
+                </ul>
+              </section>
+
+              <section className="legal-section">
+                <h3>4. Disclaimer of Warranty</h3>
+                <p>
+                  The software is provided "as is", without warranty of any kind. In no event shall the authors
+                  or copyright holders be liable for any claim or damages arising from the use of this software.
                 </p>
               </section>
             </div>

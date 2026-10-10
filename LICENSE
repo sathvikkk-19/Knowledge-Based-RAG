@@ -1,0 +1,85 @@
+CUSTOM PERMISSIVE SOURCE CODE & EDUCATIONAL LICENSE
+WITH STRICT ORIGINAL AUTHORSHIP & ANTI-PLAGIARISM CLAUSE
+
+Copyright (c) 2026 Sathvik (@sathvikkk-19) and Designated Co-Owner.
+All Rights Reserved.
+Repository: https://github.com/sathvikkk-19/Knowledge-Based-RAG
+
+================================================================================
+1. DECLARATION OF ORIGINAL OWNERSHIP & INVENTORSHIP
+================================================================================
+
+This software, including all underlying architecture, source code, data pipelines,
+hybrid graph-vector retrieval algorithms, entity resolution logic, database schemas,
+visualizer implementations, and documentation (collectively, the "Software"), is the 
+original intellectual work created and solely owned by:
+
+  • Lead / Primary Owner & Creator: Sathvik (GitHub: @sathvikkk-19)
+  • Designated Co-Owner: Private Contributor / Co-Owner
+
+Ownership, primary title, copyright, and recognition of original inception strictly 
+and exclusively belong to Sathvik and the Designated Co-Owner. Apart from these two 
+designated individuals, NO other party, individual, educational entity, or corporate 
+organization may claim or represent that they conceived, designed, or built this 
+project or any of its foundational components from scratch.
+
+================================================================================
+2. PERMITTED USES (GRANT OF LICENSE)
+================================================================================
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of 
+this Software and associated documentation files, to deal in the Software without 
+restriction for the following permitted purposes:
+
+  (a) Educational & Academic Use: To view, inspect, study, learn from, test, 
+      and run the Software for personal learning, academic study, research, 
+      and technical demonstrations.
+  (b) Development & Adaptation: To fork, branch, clone, alter, modify, develop, 
+      and build upon the codebase for educational projects, research endeavors, 
+      or personal development.
+  (c) Internal Deployment: To operate and experiment with the application, 
+      databases (Neo4j, PostgreSQL/pgvector), and frontend interfaces for 
+      private or internal evaluation.
+
+================================================================================
+3. MANDATORY CONDITIONS & AUTHORSHIP PROTECTION CLAUSES
+================================================================================
+
+Any copying, redistribution, public deployment, publication, or modification of the 
+Software is strictly contingent upon full compliance with the following conditions:
+
+  (a) STRICT PROHIBITION AGAINST FALSE AUTHORSHIP CLAIMS:
+      Under NO circumstances may any licensee, user, fork maintainer, student, 
+      candidate, or third party claim, assert, represent, or imply—in any resume, 
+      portfolio, CV, interview, academic defense, conference presentation, competition, 
+      grant application, blog post, social media post, or public repository—that 
+      they created, authored, or built this system or its foundational architecture 
+      from scratch.
+
+  (b) MANDATORY RETENTION OF COPYRIGHT & NOTICE:
+      The above copyright notice, this permission notice, and all original author 
+      attributions MUST be preserved and conspicuously displayed in:
+        (i)   All copies or substantial portions of the Software;
+        (ii)  The root LICENSE file of any forks or derivative repositories;
+        (iii) The top section of any README.md file in any derivative repository, 
+              clearly citing the original repository:
+              https://github.com/sathvikkk-19/Knowledge-Based-RAG
+
+  (c) DERIVATIVE WORK LABELING:
+      Any altered, modified, or extended version of this Software must be explicitly 
+      and clearly marked as a modified derivative work, indicating that it is derived 
+      from the original Knowledge-Based RAG project created by Sathvik (@sathvikkk-19) 
+      and the Designated Co-Owner.
+
+================================================================================
+4. DISCLAIMER OF WARRANTY & LIMITATION OF LIABILITY
+================================================================================
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS 
+FOR A PARTICULAR PURPOSE, TITLE, AND NONINFRINGEMENT. 
+
+IN NO EVENT SHALL SATHVIK, THE DESIGNATED CO-OWNER, OR ANY COPYRIGHT HOLDERS BE 
+LIABLE FOR ANY CLAIM, DAMAGES, LOSS OF DATA, OR OTHER LIABILITY, WHETHER IN AN 
+ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION 
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
