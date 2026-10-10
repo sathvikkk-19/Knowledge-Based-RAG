@@ -1,7 +1,7 @@
 # Knowledge-Based RAG (Hybrid Graph & Vector Retrieval-Augmented Generation)
 
 [![License: Custom Attribution](https://img.shields.io/badge/License-Custom_Attribution_&_Anti--Plagiarism-blue.svg)](LICENSE)
-[![Author: Sathvik](https://img.shields.io/badge/Lead_Author-Sathvik-22c55e.svg)](https://github.com/sathvikkk-19)
+[![Author: Sathwik](https://img.shields.io/badge/Lead_Author-Sathwik-22c55e.svg)](https://github.com/sathvikkk-19)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776ab.svg)](https://www.python.org/)
 [![React 19](https://img.shields.io/badge/Frontend-React_19_+_Vite-61dafb.svg)](https://react.dev/)
 
@@ -169,10 +169,10 @@ Run the automated test suite:
 ## 📄 Ownership & License
 
 ### 👤 Authors & Intellectual Property
-- **Lead / Primary Creator & Owner:** **Sathvik** ([@sathvikkk-19](https://github.com/sathvikkk-19))
+- **Lead / Primary Creator & Owner:** **Sathwik** ([@sathvikkk-19](https://github.com/sathvikkk-19))
 - **Designated Co-Owner:** Private Contributor
 
-All original architecture, source code, data pipelines, graph extraction algorithms, and visualizations are the intellectual property of **Sathvik** and the designated co-owner. Apart from these two individuals, no one else holds ownership or may claim to have built this project from scratch.
+All original architecture, source code, data pipelines, graph extraction algorithms, and visualizations are the intellectual property of **Sathwik** and the designated co-owner. Apart from these two individuals, no one else holds ownership or may claim to have built this project from scratch.
 
 ### 📜 Terms of Use
 This project is licensed under a **Custom Permissive Source Code & Educational License with Strict Authorship & Anti-Plagiarism Protection**:

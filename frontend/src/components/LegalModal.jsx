@@ -169,7 +169,7 @@ export default function LegalModal({ initialTab = "privacy", onClose }) {
                 <h3>2. Permitted Use and Licensing</h3>
                 <p>
                   This software is distributed under a Custom Permissive Source Code & Educational
-                  License. Sole original ownership is held exclusively by Sathvik (@sathvikkk-19)
+                  License. Sole original ownership is held exclusively by Sathwik (@sathvikkk-19)
                   and the designated private co-owner. Users and developers are granted rights to run,
                   inspect, alter, and build upon the codebase for educational and developmental purposes.
                   In no case may any party claim to have conceived or built this project from scratch.
@@ -260,7 +260,7 @@ export default function LegalModal({ initialTab = "privacy", onClose }) {
                 <p>
                   This project, its hybrid graph-vector architecture, entity resolution pipeline,
                   database integration, and interactive visualization interfaces are the original
-                  intellectual property and creation of <strong>Sathvik</strong> (Lead Owner & Creator, 
+                  intellectual property and creation of <strong>Sathwik</strong> (Lead Owner & Creator, 
                   <code>@sathvikkk-19</code>) and a <strong>Designated Co-Owner</strong> (confidential contributor).
                 </p>
                 <p>
@@ -299,7 +299,7 @@ export default function LegalModal({ initialTab = "privacy", onClose }) {
                   </li>
                   <li>
                     <strong>Mandatory Attribution:</strong> All copies, forks, or derivative works must
-                    prominently retain original copyright notices and cite Sathvik as the original lead creator.
+                    prominently retain original copyright notices and cite Sathwik as the original lead creator.
                   </li>
                   <li>
                     <strong>Derivative Marking:</strong> Modified versions must clearly state that they are
